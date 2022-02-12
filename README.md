@@ -18,7 +18,7 @@ The script is able to split pdf files into four files:
 3. even pages between pages x and y,
 4. all pages from page y to end.
 
-These files are moved to folder named `#_publadjust`, where `#` is the original file name of the pdf.
+These files are moved to the folder named `#_publadjust`, where `#` is the original file name of the pdf.
 
 Later, the files can be merged.
 
@@ -47,11 +47,13 @@ Should be especially helpful with scanned books.
 Usage: `publadjust -p file.pdf`
 
 ### Extract contributions from edited volumes
+For handling contributions to edited volumes separately.
 
-not implemented yet
+Usage: `publadjust -e file.pdf`
+
+The resulting pdf files are saved to the folder named `#_publadjust`, where `#` is the original file name of the pdf.
 
 ### To do
 
 - write short `-h`/help text
-- implement extraction of contributions
 - improve documentation/README.md

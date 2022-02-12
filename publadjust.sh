@@ -63,9 +63,32 @@ delete_annotations() {
   fi
 }
 
-# extract_from_collected_volume () {
-#
-# }
+extract_from_edited_volume () {
+
+  check_filetype ${1}
+  handle_filenames ${1}
+  create_temporary_folder ${1}
+
+  repeat="y"
+
+  while [ "$repeat" == "y" ]; do
+
+    read -p "Pages of frontmatter: " pr_fm
+    read -p "Year: " year
+  	read -p "Authors: " author
+  	read -p "Title of contribution: " title
+  	read -p "Page range of contribution: " pr_paper
+
+  	pdftk ${1} cat $pr_paper $pr_fm output "${temp_folder}/${author}_${year}_${title}.pdf"
+
+    echo "The file ${author}_${year}_${title}.pdf has been created in the folder ${temp_folder}."
+    echo ""
+
+  	read -p "Extract another contribution from the same edited volume? (y/N) " repeat
+
+  done
+
+}
 
 alter_page_labels () {
 
@@ -156,7 +179,6 @@ split_odd_and_even () {
   echo $pend > "${temp_folder}/.${basic_filename}_sameopdfpend"
 
   # echo result
-  echo ""
   echo "The file ${1} was split and, in the new folder ${temp_folder}, files can be found with:"
   echo "(1) all pages up to, but not including page $pstart;"
   echo "(2) odd pages between pages $pstart and $pend;"
@@ -202,11 +224,11 @@ merge_odd_and_even () {
 
   # ask user if extracted files should be deleted
   read -e -p "Should all files based on ${1} in the folder ${temp_folder} be moved to the trash? (y/N): " delete
+  echo ""
   if [ "$delete" == "y" ]
   then
     gio trash "${temp_folder}"
   fi
-  echo ""
   echo "All files based on ${1} in the folder ${temp_folder} have been moved to the trash."
   echo ""
 }
@@ -218,7 +240,7 @@ echo "|   __|  |  | __ -|  |__|     |  |  |  |  |  |  |__   | | |  ";
 echo "|__|  |_____|_____|_____|__|__|____/|_____|_____|_____| |_|  ";
 echo "                                                             ";
 
-while getopts 'd:p:s:m:' opt; do
+while getopts 'd:p:s:m:e:' opt; do
 
   case ${opt} in
     d)
@@ -233,6 +255,8 @@ while getopts 'd:p:s:m:' opt; do
     m)
     merge_odd_and_even ${OPTARG}
     ;;
+    e)
+    extract_from_edited_volume ${OPTARG}
   esac
 done
 
