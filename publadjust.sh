@@ -20,8 +20,7 @@ handle_filenames() {
 
 create_temporary_folder() {
   mkdir "${temp_folder}"
-  echo ""
-  echo "Folder ${temp_folder} is created for temporary file handling."
+  echo "Folder ${temp_folder} has been created for temporary file handling."
   echo ""
 }
 
@@ -39,11 +38,11 @@ delete_annotations() {
   echo ""
   LANG=C sed -n '/^\/Annots/!p' ".${basic_filename}_uc.pdf" > ".${basic_filename}_uc_stripped.pdf"
 
-  echo "Result is saved as ${basic_filename}_stripped.pdf."
+  echo "Result is saved as ${basic_filename}_stripped.pdf..."
   echo ""
   pdftk ".${basic_filename}_uc_stripped.pdf" output "${basic_filename}_stripped.pdf" compress
 
-  echo "Temporary files are deleted."
+  echo "Temporary files are deleted..."
   echo ""
   rm ".${basic_filename}_uc.pdf"
   rm ".${basic_filename}_uc_stripped.pdf"
@@ -212,6 +211,13 @@ merge_odd_and_even () {
   echo ""
 }
 
+echo "                                                             ";
+echo " _____ _____ _____ __    _____ ____     __ _____ _____ _____ ";
+echo "|  _  |  |  | __  |  |  |  _  |    \ __|  |  |  |   __|_   _|";
+echo "|   __|  |  | __ -|  |__|     |  |  |  |  |  |  |__   | | |  ";
+echo "|__|  |_____|_____|_____|__|__|____/|_____|_____|_____| |_|  ";
+echo "                                                             ";
+
 while getopts 'd:p:s:m:' opt; do
 
   case ${opt} in
@@ -230,7 +236,6 @@ while getopts 'd:p:s:m:' opt; do
   esac
 done
 
-echo ""
 echo "Done!"
 echo ""
 
