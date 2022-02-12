@@ -1,13 +1,16 @@
 # publadjust
-This shell script for Linux facilitates the adjustment of publications in form of pdfs.
+This shell script for Linux facilitates the adjustment of academic publications in form of pdfs.
 
-The different features of the script are based on and require installation of:
+The different features of the script are based on and require:
 * pdftk (https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/)
 * pagelabels-py (https://github.com/lovasoa/pagelabels-py)
 
-There are several functions which the script can be started with. It then leads the user through an interactive text based menu in the terminal.
+Thanks!
 
-### Split and Merge for independent processing odd and even pages
+There are several functions which the script can be started with.
+It then leads the user through an interactive text based menu in the terminal.
+
+### Split and Merge for independent processing of odd and even pages
 
 The script is able to split pdf files into four files:
 1. all pages up to page x,
@@ -15,30 +18,40 @@ The script is able to split pdf files into four files:
 3. even pages between pages x and y,
 4. all pages from page y to end.
 
-These files are moved to folder named #_sameopdf, where # is the original file name of the pdf.
+These files are moved to folder named `#_publadjust`, where `#` is the original file name of the pdf.
 
 Later, the files can be merged.
 
-This is useful when processing a scanned book, where original and translation are on opposite pages: The pages extracted can be processed independently and can then be merged again.
+This is useful when processing a scanned book, where original and translation are on opposite pages:
+the pages extracted can be processed independently and can then be merged again.
+
+Metadata, including bookmarks and annotations, is exported from old file and imported in new file.
+If errors occur, check the file `.#_data` in the temporary folder.
 
 The folder or the files created by the script should not be moved or renamed.
 
-Usage: `sameopdf -flag file`, where
+Usage: `publadjust -flag file`, where
 - `file` is a pdf file
 - `flag` is either `s` for splitting or `m` for merging
 
-### delnot-pdf
-Simple bash script to delete all annotations from a pdf file (e.g., before sharing).
+### Delete annotations
+Delete all annotations from a pdf file (e.g., before sharing).
 
-Based on and requires pdftk (https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/).
+Uses this gist: https://gist.github.com/stefanschmidt/5248592 – thanks!
 
-Usage: `delnot-pdf file.pdf`
+Usage: `publadjust -d file.pdf`
 
-### pag-pdf
-Bash script to facilitate changing internal pagination of pdf-file.
+### Relabel pages
+Should be especially helpful with scanned books.
 
-Based on and requires pagelabels-py (https://github.com/lovasoa/pagelabels-py).
+Usage: `publadjust -p file.pdf`
 
-Provides a text based user interface and should be especially helpful with scanned books.
+### Extract contributions from edited volumes
 
-Usage: `pag-pdf file.pdf`
+not implemented yet
+
+### To do
+
+- write short `-h`/help text
+- implement extraction of contributions
+- improve documentation/README.md

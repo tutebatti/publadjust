@@ -5,8 +5,10 @@ check_filetype() {
 
   if ! echo $mtype | grep -q pdf
   then
+    echo ""
     echo "Error: Provided file ist not a pdf!"
     echo "Script is aborted..."
+    echo ""
     exit 1
   fi
   }
@@ -18,12 +20,17 @@ handle_filenames() {
 
 create_temporary_folder() {
   mkdir "${temp_folder}"
+  echo ""
+  echo "Folder ${temp_folder} is created for temporary file handling."
+  echo ""
 }
 
 delete_annotations() {
 
+  check_filetype ${1}
   handle_filenames ${1}
 
+  echo ""
   echo "Pdf file ${1} is being uncompressed..."
   echo ""
   pdftk "${1}" output ".${basic_filename}_uc.pdf" uncompress
@@ -41,26 +48,20 @@ delete_annotations() {
   rm ".${basic_filename}_uc.pdf"
   rm ".${basic_filename}_uc_stripped.pdf"
 
-  read -p "Do you want to delete the original pdf-file? (y/N): " confirm_del
+  read -p "Should the original pdf-file? be moved to the trash (y/N): " confirm_del
 
   if [ "$confirm_del" == "y" ]
-
   	then
   		gio trash "${1}"
       echo ""
-      echo "Original pdf ${1} is moved to trash."
+      echo "Original pdf ${1} has been moved to the trash."
+      echo ""
 
   	else
       echo ""
-  		echo "Original pdf ${1} is not deleted."
-
+  		echo "Original pdf ${1} has not been moved to the trash."
+      echo ""
   fi
-
-  echo ""
-  echo "Done!"
-  echo ""
-
-  exit 0
 }
 
 # extract_from_collected_volume () {
@@ -68,10 +69,15 @@ delete_annotations() {
 # }
 
 alter_page_labels () {
+
+  check_filetype ${1}
+
   # checking if python script is installed
   if ! pip list | tail -n +1 | grep -q pagelabels ; then
+    echo ""
     echo "Error: \"pagelabels-py\" by lovasoa (cf. https://github.com/lovasoa/pagelabels-py) is not installed."
     echo "Script is aborted."
+    echo ""
     exit 1
   fi
 
@@ -102,20 +108,16 @@ alter_page_labels () {
 
   read -ep "Optional: enter different start of pagenumber (e.g., 3 instead of 1): " numbegin
   echo ""
-  if ["$numbegin" == ""]; then numbegin=1; fi
+  if ["$numbegin" == ""]
+    then numbegin=1
+  fi
 
   python3 -m pagelabels --startpage "$secbegin" --type "$style" --prefix "$prefix" --firstpagenum "$numbegin" "${1}"
 
-  echo ""
   read -ep "Add/change another section for pagination? (y/N) " repeat
+  echo ""
 
   done
-
-  echo ""
-  echo "Done!"
-  echo ""
-
-  exit 0
 }
 
 set_file_variables_for_odd_and_even () {
@@ -130,8 +132,11 @@ split_odd_and_even () {
   check_filetype ${1}
 
   # prompt user to input page range
+  echo ""
   read -e -p "Beginning of page range for extracting odd and even pages: " pstart
+  echo ""
   read -e -p "End of page range for extracting odd and even pages: " pend
+  echo ""
 
   handle_filenames ${1}
   create_temporary_folder
@@ -160,6 +165,7 @@ split_odd_and_even () {
   echo "(4) all pages from, but not including page $pend to the end, respectively"
   echo ""
   echo "These files can now be processed independently and later be merged."
+  echo ""
 
   exit 0
 }
@@ -171,8 +177,10 @@ merge_odd_and_even () {
   # check if temporary folder exists
   if [ ! -d "${temp_folder}" ]
   then
+      echo ""
       echo "Error: No folder with split files based on ${1} was found."
       echo "Have you used the script with the flag -s first?"
+      echo ""
       exit 1
   fi
 
@@ -189,24 +197,22 @@ merge_odd_and_even () {
 
   pdftk "${temp_folder}/.${basic_filename}_merged_no-data.pdf" update_info_utf8 "${temp_folder}/.${basic_filename}_data" output "${basic_filename}_merged.pdf"
 
+  echo ""
   echo "Files were merged to ${basic_filename}_merged.pdf."
+  echo ""
 
   # ask user if extracted files should be deleted
-  echo ""
   read -e -p "Should all files based on ${1} in the folder ${temp_folder} be moved to the trash? (y/N): " delete
   if [ "$delete" == "y" ]
   then
     gio trash "${temp_folder}"
   fi
-
-  exit 0
+  echo ""
+  echo "All files based on ${1} in the folder ${temp_folder} have been moved to the trash."
+  echo ""
 }
 
-test_function() {
-  echo "blabla"
-}
-
-while getopts 'd:p:s:m:t' opt; do
+while getopts 'd:p:s:m:' opt; do
 
   case ${opt} in
     d)
@@ -221,10 +227,11 @@ while getopts 'd:p:s:m:t' opt; do
     m)
     merge_odd_and_even ${OPTARG}
     ;;
-    t)
-    test_function
-    ;;
   esac
 done
+
+echo ""
+echo "Done!"
+echo ""
 
 exit 0
