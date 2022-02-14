@@ -55,5 +55,4 @@ The resulting pdf files are saved to the folder named `#_publadjust`, where `#` 
 
 ### To do
 
-- write short `-h`/help text
 - improve documentation/README.md
