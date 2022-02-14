@@ -18,6 +18,21 @@ handle_filenames() {
   temp_folder="${basic_filename}_publadjust"
 }
 
+echo_help() {
+  echo ""
+  echo "Syntax: publadjust [-h|d|p|e|s|m] file"
+  echo ""
+  echo "  options:"
+  echo ""
+  echo "  -h     Print this help text."
+  echo "  -d     Delete annotations."
+  echo "  -p     Relabel pages."
+  echo "  -e     Extract parts from collected volumes."
+  echo "  -s     Split file, with certain section divided according to odd and even pages."
+  echo "  -m     Merge files resulting from -s option."
+  echo ""
+}
+
 create_temporary_folder() {
   mkdir "${temp_folder}"
   echo "Folder ${temp_folder} has been created for temporary file handling."
@@ -240,9 +255,12 @@ echo "|   __|  |  | __ -|  |__|     |  |  |  |  |  |  |__   | | |  ";
 echo "|__|  |_____|_____|_____|__|__|____/|_____|_____|_____| |_|  ";
 echo "                                                             ";
 
-while getopts 'd:p:s:m:e:' opt; do
+while getopts 'hd:p:s:m:e:' opt; do
 
   case ${opt} in
+    h)
+    echo_help
+    ;;
     d)
     delete_annotations ${OPTARG}
     ;;
@@ -257,6 +275,10 @@ while getopts 'd:p:s:m:e:' opt; do
     ;;
     e)
     extract_from_edited_volume ${OPTARG}
+    ;;
+    *)
+    echo_help
+    ;;
   esac
 done
 
