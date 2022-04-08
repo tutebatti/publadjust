@@ -25,6 +25,7 @@ echo_help() {
   echo "  options:"
   echo ""
   echo "  -h     Print this help text."
+  echo "  -o     Output pagerange on certain topic."
   echo "  -d     Delete annotations."
   echo "  -p     Relabel pages."
   echo "  -e     Extract parts from collected volumes."
@@ -248,6 +249,18 @@ merge_odd_and_even () {
   echo ""
 }
 
+output_section_on_topic () {
+
+  check_filetype ${1}
+
+  echo ""
+  read -e -p "Enter page range (e.g. 3-4): " pagerange
+  echo ""
+  read -e -p "Enter a topic to be appended to filename: " topic
+
+  pdftk "$1" cat "$pagerange" output "${1%".*"}_${topic}.pdf"
+}
+
 echo "                                                             ";
 echo " _____ _____ _____ __    _____ ____     __ _____ _____ _____ ";
 echo "|  _  |  |  | __  |  |  |  _  |    \ __|  |  |  |   __|_   _|";
@@ -255,7 +268,7 @@ echo "|   __|  |  | __ -|  |__|     |  |  |  |  |  |  |__   | | |  ";
 echo "|__|  |_____|_____|_____|__|__|____/|_____|_____|_____| |_|  ";
 echo "                                                             ";
 
-while getopts 'hd:p:s:m:e:' opt; do
+while getopts 'hd:p:s:m:e:o:' opt; do
 
   case ${opt} in
     h)
@@ -275,6 +288,9 @@ while getopts 'hd:p:s:m:e:' opt; do
     ;;
     e)
     extract_from_edited_volume ${OPTARG}
+    ;;
+    o)
+    output_section_on_topic ${OPTARG}
     ;;
     *)
     echo_help

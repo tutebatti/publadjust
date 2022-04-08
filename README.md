@@ -10,29 +10,21 @@ Thanks!
 There are several functions which the script can be started with.
 It then leads the user through an interactive text based menu in the terminal.
 
-### Split and Merge for independent processing of odd and even pages
-
-The script is able to split pdf files into four files:
-1. all pages up to page x,
-2. odd pages between pages x and y,
-3. even pages between pages x and y,
-4. all pages from page y to end.
-
-These files are moved to the folder named `#_publadjust`, where `#` is the original file name of the pdf.
-
-Later, the files can be merged.
-
-This is useful when processing a scanned book, where original and translation are on opposite pages:
-the pages extracted can be processed independently and can then be merged again.
-
-Metadata, including bookmarks and annotations, is exported from old file and imported in new file.
-If errors occur, check the file `.#_data` in the temporary folder.
-
-The folder or the files created by the script should not be moved or renamed.
-
 Usage: `publadjust -flag file`, where
 - `file` is a pdf file
-- `flag` is either `s` for splitting or `m` for merging
+- `flag` is either 
+  * `o` for output of a section/page range,
+  * `d` for deleting annotations,
+  * `p` relabeling pages,
+  * `e` output contributions of an edited volume, 
+  * `s` for splitting or
+  * `m` for merging the file split before.
+
+### Output section/page range on certain topic in separat file
+
+Extract a certain section (within a given page range) and output to a separate file with an appended filename, e.g. pages x-y in `meier_2004_medieval-history.pdf` as `meier_2004_medieval-history_crusades.pdf`.
+
+Usage: `publadjust -o file.pdf`
 
 ### Delete annotations
 Delete all annotations from a pdf file (e.g., before sharing).
@@ -52,6 +44,26 @@ For handling contributions to edited volumes separately.
 Usage: `publadjust -e file.pdf`
 
 The resulting pdf files are saved to the folder named `#_publadjust`, where `#` is the original file name of the pdf.
+
+### Split and Merge for independent processing of odd and even pages
+
+The script is able to split pdf files into four files:
+1. all pages up to page x,
+2. odd pages between pages x and y,
+3. even pages between pages x and y,
+4. all pages from page y to end.
+
+These files are moved to the folder named `#_publadjust`, where `#` is the original file name of the pdf.
+
+Later, the files can be merged.
+
+This is useful when processing a scanned book, where original and translation are on opposite pages:
+the pages extracted can be processed independently and can then be merged again.
+
+Metadata, including bookmarks and annotations, is exported from old file and imported in new file.
+If errors occur, check the file `.#_data` in the temporary folder.
+
+The folder or the files created by the script should not be moved or renamed.
 
 ### To do
 
